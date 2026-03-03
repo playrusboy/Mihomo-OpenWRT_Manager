@@ -51,8 +51,7 @@ id=$(echo "$response" | jq -r '.result.id')
 token=$(echo "$response" | jq -r '.result.token')
 
 if [ -z "$id" ] || [ "$id" = "null" ]; then
-    echo -e "${RED}Ошибка регистрации:${NC}"
-    echo "$response"
+    echo -e "${RED}Ошибка регистрации${NC} $response"
     exit 1
 fi
 
