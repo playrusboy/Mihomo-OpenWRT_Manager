@@ -1210,10 +1210,10 @@ install_magitrickle() {
             rm -f "$IPK"
 			echo "--> Установка списка для MagiTrickle..."
 			
-CONFIGPATH="/etc/magitrickle/state/config.yaml"
-configAD="https://raw.githubusercontent.com/StressOzz/Use_WARP_on_OpenWRT/refs/heads/main/files/MagiTrickle/configAD.yaml"
+confWRT="/etc/magitrickle/state/config.yaml"
+confGIT="https://raw.githubusercontent.com/StressOzz/Use_WARP_on_OpenWRT/refs/heads/main/files/MagiTrickle/configAD.yaml"
 
-  wget -q -O "$CONFIGPATH" "$configAD" || {
+  wget -q -O "$confWRT" "$confGIT" || {
     echo "Ошибка: не удалось скачать список!"
     echo "URL: $MAGITRICKLE_CONFIG_URL"
     return 1
