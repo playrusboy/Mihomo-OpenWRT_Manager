@@ -35,7 +35,7 @@ BEGIN{
   sec=""
   addr4=""; addr6=""; dns=""; mtu=""
   priv=""; pub=""; psk=""; allowed=""; endpoint=""; keep=""
-  s1=""; s2=""; jc=""; jmin=""; jmax=""; h1=""; h2=""; h3=""; h4=""
+  s1=""; s2=""; s3=""; s4=""; jc=""; jmin=""; jmax=""; h1=""; h2=""; h3=""; h4=""
   i1=""; i2=""; i3=""; i4=""; i5=""
 }
 {
@@ -67,6 +67,8 @@ BEGIN{
     else if(k=="mtu") mtu=val
     else if(k=="s1") s1=val
     else if(k=="s2") s2=val
+    else if(k=="s3") s3=val
+    else if(k=="s4") s4=val
     else if(k=="jc") jc=val
     else if(k=="jmin") jmin=val
     else if(k=="jmax") jmax=val
@@ -151,10 +153,12 @@ END{
   if(keep!="") print "    persistent-keepalive: " keep >> OUT
 
   # Если есть хоть один AWG-параметр — добавляем блок
-  if(s1!="" || s2!="" || jc!="" || jmin!="" || jmax!="" || h1!="" || h2!="" || h3!="" || h4!="" || i1!="" || i2!="" || i3!="" || i4!="" || i5!=""){
+  if(s1!="" || s2!="" || s3!="" || s4!="" || jc!="" || jmin!="" || jmax!="" || h1!="" || h2!="" || h3!="" || h4!="" || i1!="" || i2!="" || i3!="" || i4!="" || i5!=""){
     print "    amnezia-wg-option:" >> OUT
     if(s1!="")  print "      s1: " s1 >> OUT
     if(s2!="")  print "      s2: " s2 >> OUT
+    if(s3!="")  print "      s1: " s1 >> OUT
+    if(s4!="")  print "      s2: " s2 >> OUT
     if(jc!="")  print "      jc: " jc >> OUT
     if(jmin!="")print "      jmin: " jmin >> OUT
     if(jmax!="")print "      jmax: " jmax >> OUT
