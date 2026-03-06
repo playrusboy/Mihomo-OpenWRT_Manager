@@ -11,6 +11,17 @@ sh <(wget -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/M
 Для генерации **WARP** через скрипт возможно понадобится установить **[Zapret](https://github.com/StressOzz/Zapret-Manager)**
 
 Для интеграции своего **WARP** файла - скиньте его в `/root/WARP.conf`
+```
+Меню 
+1) Установить Mixomo
+2) Удалить Mixomo
+3) Сменить список MagiTrickle
+   1) Список от ITDog
+   2) Список от Internet Helper
+4) Сгенерировать WARP в /root/WARP.conf
+5) Интегрировать /root/WARP.conf в Mihomo
+Enter) Выход
+```
 
 ---
 
@@ -54,6 +65,13 @@ sh <(wget -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/M
 - Нажмите <img width="90" height="101" alt="Image" src="https://github.com/user-attachments/assets/ed1f3143-1a2e-460d-9e27-cbf8d69b3ae4" />
 
 - Нажмите на  <img width="41" height="150" alt="Image" src="https://github.com/user-attachments/assets/12660858-7a96-4fa3-b0f3-c3bc6bad6a3c" /> это скопирует результат
+
+---
+
+# Установка Mixomo
+```
+sh <(wget -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/mixomo_openwrt_install.sh)
+```
 
 ---
 
@@ -117,6 +135,12 @@ sh <(wget -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/A
 
 ---
 
+# Удаление Mihomo
+```
+sh <(wget -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/mixomo_openwrt_delete.sh)
+```
+
+---
 Можете генерировать разные WARP и пробовать, т.к. в `По умолчанию` не будет работать `GeoBlock`...
 
 Для смены WARP:
