@@ -12,52 +12,52 @@ clear
 echo -e "${MAGENTA}Генерируем ключи AWG${NC}"
 
 if command -v apk >/dev/null 2>&1; then
-    PKG="apk"
+PKG="apk"
 elif command -v opkg >/dev/null 2>&1; then
-    PKG="opkg"
+PKG="opkg"
 else
-    echo -e "${RED}Не найден пакетный менеджер!${NC}"
-    exit 1
+echo -e "${RED}Не найден пакетный менеджер!${NC}"
+exit 1
 fi
 
 echo -e "${CYAN}Обновляем пакеты...${NC}"
 
 if [ "$PKG" = "apk" ]; then
-    apk update >/dev/null 2>&1 || {
-        echo -e "\n${RED}Ошибка обновления пакетов!${NC}"
-        exit 1
-    }
+apk update >/dev/null 2>&1 || {
+echo -e "\n${RED}Ошибка обновления пакетов!${NC}"
+exit 1
+}
 else
-    opkg update >/dev/null 2>&1 || {
-        echo -e "\n${RED}Ошибка обновления пакетов!${NC}"
-        exit 1
-    }
+opkg update >/dev/null 2>&1 || {
+echo -e "\n${RED}Ошибка обновления пакетов!${NC}"
+exit 1
+}
 fi
 
 install_pkg() {
-    pkg="$1"
+pkg="$1"
 
-    if [ "$PKG" = "apk" ]; then
-        apk info -e "$pkg" >/dev/null 2>&1 && return
-        echo -e "${GREEN}Устанавливаем:${NC} $pkg"
-        apk add "$pkg" >/dev/null 2>&1 || {
-            echo -e "\n${RED}Ошибка установки${NC} $pkg"
-            exit 1
-        }
-    else
-        opkg list-installed 2>/dev/null | grep -qF "^$pkg " && return
-        echo -e "${GREEN}Устанавливаем:${NC} $pkg"
-        opkg install "$pkg" >/dev/null 2>&1 || {
-            echo -e "\n${RED}Ошибка установки${NC} $pkg"
-            exit 1
-        }
-    fi
+if [ "$PKG" = "apk" ]; then
+apk info -e "$pkg" >/dev/null 2>&1 && return
+echo -e "${GREEN}Устанавливаем:${NC} $pkg"
+apk add "$pkg" >/dev/null 2>&1 || {
+echo -e "\n${RED}Ошибка установки${NC} $pkg"
+exit 1
+}
+else
+opkg list-installed 2>/dev/null | grep -qF "^$pkg " && return
+echo -e "${GREEN}Устанавливаем:${NC} $pkg"
+opkg install "$pkg" >/dev/null 2>&1 || {
+echo -e "\n${RED}Ошибка установки${NC} $pkg"
+exit 1
+}
+fi
 }
 
 echo -e "${CYAN}Проверяем зависимости...${NC}"
 
 for pkg in wireguard-tools curl jq coreutils-base64; do
-    install_pkg "$pkg"
+install_pkg "$pkg"
 done
 
 echo -e "${YELLOW}Генерируем ключи...${NC}"
@@ -67,14 +67,14 @@ pub="$(printf "%s" "$priv" | wg pubkey)"
 api="https://api.cloudflareclient.com/v0i1909051800"
 
 ins() {
-    curl -s \
-        -H "User-Agent: okhttp/3.12.1" \
-        -H "Content-Type: application/json" \
-        -X "$1" "$api/$2" "${@:3}"
+curl -s \
+-H "User-Agent: okhttp/3.12.1" \
+-H "Content-Type: application/json" \
+-X "$1" "$api/$2" "${@:3}"
 }
 
 sec() {
-    ins "$1" "$2" -H "Authorization: Bearer $3" "${@:4}"
+ins "$1" "$2" -H "Authorization: Bearer $3" "${@:4}"
 }
 
 echo -e "${GREEN}Регистрируем устройство в Cloudflare...${NC}"
@@ -86,8 +86,8 @@ id=$(echo "$response" | jq -r '.result.id')
 token=$(echo "$response" | jq -r '.result.token')
 
 if [ -z "$id" ] || [ "$id" = "null" ]; then
-    echo -e "${RED}Ошибка регистрации${NC} $response"
-    exit 1
+echo -e "${RED}Ошибка регистрации${NC} $response"
+exit 1
 fi
 
 echo -e "${GREEN}Активируем WARP...${NC}"
@@ -99,8 +99,8 @@ client_ipv4=$(echo "$response" | jq -r '.result.config.interface.addresses.v4')
 client_ipv6=$(echo "$response" | jq -r '.result.config.interface.addresses.v6')
 
 if [ -z "$peer_pub" ] || [ "$peer_pub" = "null" ]; then
-    echo -e "\n${RED}Ошибка получения конфигурации${NC}"
-    exit 1
+echo -e "\n${RED}Ошибка получения конфигурации${NC}"
+exit 1
 fi
 
 conf=$(cat <<EOF
