@@ -1,8 +1,5 @@
 # Инструкция по установке и настройке:
 
-только для OpenWRT 24+
----
-
 - в **SSH** запустите скрипт:
 ```
 sh <(wget -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/Mixomo-Manager.sh)
