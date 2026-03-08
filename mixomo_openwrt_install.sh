@@ -1282,6 +1282,8 @@ EOF
 
 
 install_magitrickle() {
+	log_info "Установка MagiTrickle..."
+
     local CONFIG_PATH="/etc/magitrickle/state/config.yaml"
     local BACKUP_PATH="/tmp/magitrickle_config_backup.yaml"
 
