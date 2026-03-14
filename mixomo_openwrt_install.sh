@@ -1,7 +1,5 @@
 #!/bin/sh
 
-SCRIPT_VERSION="v0.1.2-alpha"
-
 MT_VERSION="0.5.3"
 MT_PRE_APK="pre20260305232358-r1"
 MT_PRE_IPK="~git20260305232358.d47bd8b3-1"
@@ -1229,7 +1227,7 @@ finalize_install() {
 
 main() {
     clear
-	log_done "Скрипт установки Mixomo OpenWRT $SCRIPT_VERSION"
+	log_done "Скрипт установки Mixomo OpenWRT"
 	log_done "        от Internet Helper (StressOzz Remix)"
     echo ""
 
@@ -1253,7 +1251,7 @@ main() {
     finalize_install || step_fail
     echo ""
 
-    log_step "Установка Mixomo OpenWRT $SCRIPT_VERSION прошла успешно!"
+    log_step "Установка Mixomo OpenWRT прошла успешно!"
 }
 
 main
