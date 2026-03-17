@@ -78,7 +78,7 @@ echo -e "                         ${DGRAY}by StressOzz${NC}\n"
 check_status
 
 grep -F -A1 'id: "06776295"' "$CONFIGPATH" 2>/dev/null | grep -q 'name: Meta (WA+FB+Instagram)' && echo -e "${YELLOW}Используется список: ${NC}Internet Helper"
-grep -F -A1 'id: 0d9bc63c' "$CONFIGPATH" 2>/dev/null | grep -q 'name: Google_ai' && echo -e "${YELLOW}Используется список: ${NC}ITDog"
+grep -F -A1 'id: 4c172a51' "$CONFIGPATH" 2>/dev/null | grep -q 'name: Google_ai' && echo -e "${YELLOW}Используется список: ${NC}ITDog"
 
 echo -e "\n${CYAN}1) ${GREEN}Установить ${NC}Mixomo"
 echo -e "${CYAN}2) ${GREEN}Удалить ${NC}Mixomo"
