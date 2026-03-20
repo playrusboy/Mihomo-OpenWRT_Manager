@@ -57,11 +57,33 @@ fi
 }
 
 check_status() {
-  MIHOMO_STATUS="${RED}не установлен${NC}"; HEV_STATUS="${RED}не установлен${NC}"; MAGITRICKLE_STATUS="${RED}не установлен${NC}"
+  MIHOMO_STATUS="${RED}не установлен${NC}"
+  HEV_STATUS="${RED}не установлен${NC}"
+  MAGITRICKLE_STATUS="${RED}не установлен${NC}"
 
-  [ -x /etc/init.d/mihomo ] && MIHOMO_STATUS="${GREEN}установлен${NC}"
-  [ -x /etc/init.d/hev-socks5-tunnel ] && HEV_STATUS="${GREEN}установлен${NC}"
-  [ -x /etc/init.d/magitrickle ] && MAGITRICKLE_STATUS="${GREEN}установлен${NC}"
+  if [ -x /etc/init.d/mihomo ]; then
+    STATUS=$(/etc/init.d/mihomo status 2>/dev/null)
+    case "$STATUS" in
+      running|active) MIHOMO_STATUS="${GREEN}запущен${NC}" ;;
+      *)              MIHOMO_STATUS="${RED}остановлен${NC}" ;;
+    esac
+  fi
+
+  if [ -x /etc/init.d/hev-socks5-tunnel ]; then
+    STATUS=$(/etc/init.d/hev-socks5-tunnel status 2>/dev/null)
+    case "$STATUS" in
+      running|active) HEV_STATUS="${GREEN}запущен${NC}" ;;
+      *)              HEV_STATUS="${RED}остановлен${NC}" ;;
+    esac
+  fi
+
+  if [ -x /etc/init.d/magitrickle ]; then
+    STATUS=$(/etc/init.d/magitrickle status 2>/dev/null)
+    case "$STATUS" in
+      running|active) MAGITRICKLE_STATUS="${GREEN}запущен${NC}" ;;
+      *)              MAGITRICKLE_STATUS="${RED}остановлен${NC}" ;;
+    esac
+  fi
 
   echo -e "${YELLOW}Mihomo:${NC}              $MIHOMO_STATUS"
   echo -e "${YELLOW}MagiTrickle:${NC}         $MAGITRICKLE_STATUS"
@@ -77,8 +99,25 @@ echo -e "                         ${DGRAY}by StressOzz${NC}\n"
 
 check_status
 
-grep -F -A1 'id: "06776295"' "$CONFIGPATH" 2>/dev/null | grep -q 'name: Meta (WA+FB+Instagram)' && echo -e "${YELLOW}Используется список: ${NC}Internet Helper"
-grep -F -A1 'id: 4c172a51' "$CONFIGPATH" 2>/dev/null | grep -q 'name: Google_ai' && echo -e "${YELLOW}Используется список: ${NC}ITDog"
+[ -f /etc/mihomo/config.yaml ] && while IFS='|' read -r c a; do h=${a%%:*}
+grep -qF "$h" /etc/mihomo/config.yaml && echo -e "${YELLOW}WARP endpoint:       ${CYAN}$c${NC}" && break
+done <<EOF
+Россия|engage.cloudflareclient.com:4500
+Латвия|150.241.75.91:4500
+Германия|de.tribukvy.ltd:4501
+Литва|lt.tribukvy.ltd:4501
+Нидерланды 2|nl3.tribukvy.ltd:4501
+Нидерланды 1|nl0.tribukvy.ltd:4501
+Финляндия 2|fi.tribukvy.ltd:4501
+Финляндия 1|fi0.tribukvy.ltd:4501
+Эстония|ee.tribukvy.ltd:4501
+Польша|pl.tribukvy.ltd:4501
+EOF
+
+if [ -f "$CONFIGPATH" ]; then
+    grep -Fq 'name: Google_ai' "$CONFIGPATH" && echo -e "${YELLOW}Используется список: ${NC}ITDog"
+    grep -Fq 'name: Meta (WA+FB+Instagram)' "$CONFIGPATH" && echo -e "${YELLOW}Используется список: ${NC}Internet Helper"
+fi
 
 echo -e "\n${CYAN}1) ${GREEN}Установить ${NC}Mixomo"
 echo -e "${CYAN}2) ${GREEN}Удалить ${NC}Mixomo"
