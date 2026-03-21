@@ -112,7 +112,7 @@ END{
   print "allow-lan: false" >> OUT
   print "tcp-concurrent: true" >> OUT
   print "mode: rule" >> OUT
-  print "log-level: info" >> OUT
+  print "log-level: error" >> OUT
   print "ipv6: false" >> OUT
   print "external-controller: 0.0.0.0:9090" >> OUT
   print "external-ui: ui" >> OUT
