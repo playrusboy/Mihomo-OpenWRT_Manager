@@ -15,23 +15,6 @@ EP_LIST='Россия CF   |engage.cloudflareclient.com:4500
 Германия    |de.tribukvy.ltd:4500
 Литва       |lt.tribukvy.ltd:4500'
 
-Текущая страна|engage.cloudflareclient.com:4500
-Нидерланды|45.84.222.208:4500
-Америка|usa-pop.astracat.ru:4500
-Сингапур|5.34.176.170:4500
-Латвия|150.241.75.91:4500
-Нидерланды|nl.tribukvy.ltd:4500
-Нидерланды|nl0.tribukvy.ltd:4500
-Финляндия|fi.tribukvy.ltd:4500
-Финляндия|fi0.tribukvy.ltd:4500
-Россия|ru.tribukvy.ltd:4500
-Эстония|ee.tribukvy.ltd:4500
-Польша|pl.tribukvy.ltd:4500
-Германия|de.tribukvy.ltd:4500
-Литва|lt.tribukvy.ltd:4500
-
-
-
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
