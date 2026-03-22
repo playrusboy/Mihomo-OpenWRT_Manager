@@ -93,7 +93,7 @@ check_status() {
 show_menu() {
 clear
 echo -e "╔═══════════════════════════════════╗"
-echo -e "║ ${BLUE}Mixomo on Internet-Helper Manager${NC} ║"
+echo -e "║ ${BLUE}Mixomo by Internet-Helper Manager${NC} ║"
 echo -e "╚═══════════════════════════════════╝"
 echo -e "                         ${DGRAY}by StressOzz${NC}\n"
 
