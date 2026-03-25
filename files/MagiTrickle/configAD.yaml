@@ -33,7 +33,7 @@ app:
     link:
         - br-lan
     showAllInterfaces: false
-    logLevel: info
+    logLevel: error
 groups:
     - id: b2013e42
       name: Anime
