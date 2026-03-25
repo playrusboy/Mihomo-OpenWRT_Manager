@@ -6,14 +6,12 @@ YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-MT_VERSION="0.5.3"
-MT_PRE_APK="pre20260305232358-r1"
-MT_PRE_IPK="~git20260305232358.d47bd8b3-1"
+MT_VERSION="$(curl -Ls -o /dev/null -w '%{url_effective}' https://github.com/MagiTrickle/MagiTrickle/releases/latest | sed -E 's#.*/tag/v?##')"
 
 ARCH=$(grep "^OPENWRT_ARCH=" /etc/os-release | cut -d'"' -f2)
 
-URL_APK_ORIG="https://gitlab.com/magitrickle/magitrickle/-/jobs/13378493545/artifacts/raw/.build/magitrickle_${MT_VERSION}_${MT_PRE_APK}_openwrt_${ARCH}.apk"
-URL_IPK_ORIG="https://gitlab.com/magitrickle/magitrickle/-/jobs/13378493545/artifacts/raw/.build/magitrickle_${MT_VERSION}${MT_PRE_IPK}_openwrt_${ARCH}.ipk"
+URL_APK_ORIG="https://github.com/MagiTrickle/MagiTrickle/releases/download/${MT_VERSION}/magitrickle_${MT_VERSION}-r1_openwrt_${ARCH}.apk"
+URL_IPK_ORIG="https://github.com/MagiTrickle/MagiTrickle/releases/download/${MT_VERSION}/magitrickle_${MT_VERSION}-1_openwrt_${ARCH}.ipk"
 
 URL_APK_MOD="https://github.com/badigit/MagiTrickle_mod_badigit/releases/download/0.5.2-badigit.9/magitrickle_0.5.2.9-r1_openwrt_${ARCH}.apk"
 URL_IPK_MOD="https://github.com/badigit/MagiTrickle_mod_badigit/releases/download/0.5.2-badigit.9/magitrickle_0.5.2-badigit.9-1_openwrt_${ARCH}.ipk"
