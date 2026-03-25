@@ -33,7 +33,7 @@ app:
     link:
         - br-lan
     showAllInterfaces: false
-    logLevel: info
+    logLevel: error
 groups:
     - id: 9d69c65e
       name: Свои сайты
