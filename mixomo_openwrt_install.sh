@@ -19,9 +19,10 @@ URL_APK_MOD="https://github.com/badigit/MagiTrickle_mod_badigit/releases/downloa
 URL_IPK_MOD="https://github.com/badigit/MagiTrickle_mod_badigit/releases/download/${MOD_VERSION}/magitrickle_${MOD_VERSION}-1_openwrt_${ARCH}.ipk"
 
 magitrickle_menu() {
-    echo -e "\n${GREEN}Выберите версию MagiTrickle для установки${NC}"
-    echo -e " 1) ${CYAN}Оригинальный MagiTrickle${NC}"
-    echo -e " 2) ${CYAN}MagiTrickle badigit mod${NC}"
+
+	echo -e "\n${YELLOW}Выберите версию MagiTrickle для установки\n${NC}"
+    echo -e "1) ${CYAN}Оригинальный MagiTrickle${NC}"
+    echo -e "2) ${CYAN}MagiTrickle badigit mod${NC}\n"
 
     echo -en "${YELLOW}Введите номер: ${NC}"
     read choice
@@ -30,12 +31,14 @@ magitrickle_menu() {
         2)
             URL_APK="$URL_APK_MOD"
             URL_IPK="$URL_IPK_MOD"
-			echo -e "\n--> Устанавливаем MagiTrickle badigit mod"
+			echo
+			log_info "Устанавливаем MagiTrickle badigit mod"
             ;;
         *)
             URL_APK="$URL_APK_ORIG"
             URL_IPK="$URL_IPK_ORIG"
-			echo -e "\n--> Устанавливаем оригинальный MagiTrickle"
+			echo
+			log_info "Устанавливаем оригинальный MagiTrickle"
             ;;
     esac
 }
@@ -1164,7 +1167,6 @@ EOF
 
 
 install_magitrickle() {
-	log_info "Установка MagiTrickle"
 
 magitrickle_menu
 
@@ -1181,12 +1183,16 @@ magitrickle_menu
 
 if [ "$USE_APK" -eq 1 ]; then
     FILE=/tmp/magitrickle.apk
-    curl -Lf --retry 3 --retry-delay 2 -o "$FILE" "$URL_APK" >/dev/null 2>&1 || { echo -e "${RED}ошибка скачивания .apk${NC}"; exit 1; }
-    apk add --allow-untrusted "$FILE" >/dev/null 2>&1 || { echo -e "${RED}ошибка установки .apk${NC}"; exit 1; }
+	echo -e "--> Скачиваем:\n$URL_APK"
+    curl -Lf --retry 3 --retry-delay 2 -o "$FILE" "$URL_APK" >/dev/null 2>&1 || { echo -e "\n${RED}Ошибка скачивания${NC}"; exit 1; }
+	echo -e "--> Устанавливаем $(basename "$URL_APK")"
+    apk add --allow-untrusted "$FILE" >/dev/null 2>&1 || { echo -e "\n${RED}Ошибка установки${NC}"; exit 1; }
 else
     FILE=/tmp/magitrickle.ipk
-    curl -Lf --retry 3 --retry-delay 2 -o "$FILE" "$URL_IPK" >/dev/null 2>&1 || { echo -e "${RED}ошибка скачивания .ipk${NC}"; exit 1; }
-    opkg install "$FILE" >/dev/null 2>&1 || { echo -e "${RED}ошибка установки .ipk${NC}"; exit 1; }
+	echo -e "--> Скачиваем:\n$URL_IPK"
+    curl -Lf --retry 3 --retry-delay 2 -o "$FILE" "$URL_IPK" >/dev/null 2>&1 || { echo -e "\n${RED}Ошибка скачивания${NC}"; exit 1; }
+	echo -e "--> Устанавливаем $(basename "$URL_IPK")"
+    opkg install "$FILE" >/dev/null 2>&1 || { echo -e "\n${RED}Ошибка установки${NC}"; exit 1; }
 fi
 
 rm -f "$FILE"
