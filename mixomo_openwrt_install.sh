@@ -6,7 +6,7 @@ YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-MT_VERSION="$(curl -Ls -o /dev/null -w '%{url_effective}' https://github.com/MagiTrickle/MagiTrickle/releases/latest | sed -E 's#.*/tag/v?##')"
+MT_VERSION="$(curl -Ls -o /dev/null -w '%{url_effective}' https://github.com/MagiTrickle/MagiTrickle/releases/latest | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
 MOD_VERSION="$(curl -Ls -o /dev/null -w '%{url_effective}' https://github.com/badigit/MagiTrickle_mod_badigit/releases/latest | sed -E 's#.*/tag/v?##')"
 MOD_VERSION_APK="$(curl -Ls -o /dev/null -w '%{url_effective}' https://github.com/badigit/MagiTrickle_mod_badigit/releases/latest | sed -E 's#.*/tag/v?##; s/-badigit//')"
 
