@@ -563,7 +563,7 @@ return view.extend({
         mainConfigContent = data[0] || '';
         var serviceInfo = data[1] || {};
         cachedRuleFiles = (data[2] || []).sort(function(a, b) { return a.name.localeCompare(b.name); });
-        var isRunning = !!(serviceInfo.mihomo && serviceInfo.mihomo.instances.main.running);
+		var isRunning = !!(serviceInfo.mihomo && serviceInfo.mihomo.instances && serviceInfo.mihomo.instances.main && serviceInfo.mihomo.instances.main.running);
         
         var versionContainer = E('span', { 'id': 'mihomo-version', 'style': 'margin-left: 10px; font-size: 0.9em; opacity: 0.7;' }, _('Загрузка'));
         var latestVersionEl = E('span', { 'id': 'mihomo-latest-version', 'style': 'margin-left: 4px; font-size: 0.9em; opacity: 0.7; display: none;' }, '');
