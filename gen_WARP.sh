@@ -1,8 +1,8 @@
 #!/bin/sh
 
-EP_LIST='Россия     |engage.cloudflareclient.com:4500
-Россия #2  |engage.cloudflareclient.com:2408
-Россия #3  |engage.cloudflareclient.com:500'
+EP_LIST='Россия    |engage.cloudflareclient.com:4500
+Россия #2 |engage.cloudflareclient.com:2408
+Россия #3 |engage.cloudflareclient.com:500'
 
 #Америка    |usa.tribukvy.ltd:4500
 #Нидерланды |nl.tribukvy.ltd:4500
@@ -27,7 +27,7 @@ TMP_FILE=$(mktemp)
 while IFS='|' read -r country ep; do
 (
 host="${ep%%:*}"
-ping_ms="$(ping -c3 -W2 "$host" 2>/dev/null | awk -F'/' 'END{print int($5)}')"
+ping_ms="$(ping -c2 -W2 "$host" 2>/dev/null | awk -F'/' 'END{print int($5)}')"
 if [ -z "$ping_ms" ] || [ "$ping_ms" -eq 0 ]; then
 ping_val="FAIL"
 ping_sort=9999
@@ -59,30 +59,27 @@ else
 color="$RED"
 fi
 fi
-printf "${CYAN}%2d) ${GREEN}%-10s${MAGENTA}| ${color}%-7s${MAGENTA}| ${CYAN}%s${NC}\n" "$i" "$country" "$ping_val" "$ep"
+printf "${CYAN}%d) ${GREEN}%-10s${MAGENTA}| ${color}%-7s${MAGENTA}| ${CYAN}%s${NC}\n" "$i" "$country" "$ping_val" "$ep"
 i=$((i+1))
 done
 
-echo -e "${CYAN}99) ${YELLOW}Обновить пинг${NC}"
+echo -e "${CYAN}0) ${YELLOW}Обновить пинг${NC}"
 
 echo -en "\n${YELLOW}Выберите страну (Enter = Россия):${NC} "
 read num
 
 MAX_NUM=$(echo "$SORTED_LIST" | wc -l)
 
-# Enter → дефолт
 if [ -z "$num" ]; then
 ENDPOINT="engage.cloudflareclient.com:4500"
 break
 fi
 
-# Обновить
-if [ "$num" = "99" ]; then
+if [ "$num" = "0" ]; then
 clear
 continue
 fi
 
-# Проверка числа
 if ! printf '%s' "$num" | grep -qE '^[0-9]+$' || [ "$num" -lt 1 ] || [ "$num" -gt "$MAX_NUM" ]; then
 ENDPOINT="engage.cloudflareclient.com:4500"
 break
