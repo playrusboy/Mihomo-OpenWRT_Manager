@@ -111,7 +111,7 @@ global-ua: clash.meta.router
 allow-lan: false
 tcp-concurrent: true
 mode: rule
-log-level: info
+log-level: error
 ipv6: false
 external-controller: 0.0.0.0:9090
 external-ui: ui
