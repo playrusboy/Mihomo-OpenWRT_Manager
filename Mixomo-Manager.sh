@@ -9,6 +9,12 @@ BLUE="\033[0;34m"
 NC="\033[0m"
 DGRAY="\033[38;5;244m"
 
+if command -v opkg >/dev/null 2>&1; then UPDATE="opkg update"; INSTALL="opkg install"; else UPDATE="apk update"; INSTALL="apk add"; fi
+
+if ! command -v curl >/dev/null 2>&1; then clear; echo -e "${CYAN}Устанавливаем ${NC}curl"
+$UPDATE >/dev/null 2>&1 && $INSTALL curl >/dev/null 2>&1 || { echo -e "\n${RED}Ошибка установки curl${NC}\n"; PAUSE ;return 1; }; fi;
+
+
 CONFIGPATH="/etc/magitrickle/state/config.yaml"
 URL_DEFAULT="https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/refs/heads/main/files/MagiTrickle/config.yaml"
 URL_ITDOG="https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/refs/heads/main/files/MagiTrickle/configAD.yaml"
@@ -90,6 +96,69 @@ check_status() {
   echo -e "${YELLOW}HevSocks5Tunnel:${NC}     $HEV_STATUS"
 }
 
+PODPISKA() {
+
+  sh <(wget -q -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/mixomo_openwrt_install.sh)
+
+  echo -ne "\n${YELLOW}Введите ссылку на подписку (${CYAN}https://sub....${YELLOW}): ${NC}"
+  read -r SUB_URL
+
+  [ -z "$SUB_URL" ] && echo -e "${RED}Ошибка: ссылка пустая!${NC}" && PAUSE && return
+
+  cat > /etc/mihomo/config.yaml <<EOF
+mixed-port: 7890
+global-ua: clash.meta.router
+allow-lan: false
+tcp-concurrent: true
+mode: rule
+log-level: info
+ipv6: false
+external-controller: 0.0.0.0:9090
+external-ui: ui
+external-ui-url: https://github.com/MetaCubeX/metacubexd/releases/latest/download/compressed-dist.tgz
+secret: 
+unified-delay: true
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+proxy-groups:
+  - name: "StressKVN"
+    type: url-test
+    use:
+      - sub.skytunnel.pw
+    url: "https://www.gstatic.com/generate_204"
+    interval: 300
+    tolerance: 50
+  - name: GLOBAL
+    type: select
+    proxies:
+      - "StressKVN"
+      - REJECT
+
+rules:
+  - "MATCH,GLOBAL"
+
+proxy-providers:
+  sub.skytunnel.pw:
+    type: http
+    url: "$SUB_URL"
+    interval: 43200
+    health-check:
+      enable: true
+      interval: 300
+      url: "https://www.gstatic.com/generate_204"
+      expected-status: 204
+EOF
+
+/etc/init.d/mihomo reload >/dev/null 2>&1
+/etc/init.d/mihomo restart >/dev/null 2>&1
+
+  echo -e "\n${GREEN}Подписка успешно применена!${NC}"
+
+  PAUSE
+}
+
 show_menu() {
 clear
 echo -e "╔═══════════════════════════════════╗"
@@ -124,12 +193,16 @@ if [ -f "$CONFIGPATH" ]; then
     grep -Fq 'name: Meta (WA+FB+Instagram)' "$CONFIGPATH" && echo -e "${YELLOW}Используется список: ${NC}Internet Helper"
 fi
 
+[ -f /etc/mihomo/config.yaml ] && grep -q "https://sub" /etc/mihomo/config.yaml && echo -e "${YELLOW}Web-интерфейс:${NC}       ${CYAN}http://192.168.1.1:9090/ui/${NC}"
+
+
 echo -e "\n${CYAN}1) ${GREEN}Установить ${NC}Mixomo"
-echo -e "${CYAN}2) ${GREEN}Удалить ${NC}Mixomo"
-echo -e "${CYAN}3) ${GREEN}Сменить список ${NC}MagiTrickle"
-echo -e "${CYAN}4) ${GREEN}Сгенерировать ${NC}WARP ${GREEN}в ${NC}/root/WARP.conf"
-echo -e "${CYAN}5) ${GREEN}Интегрировать ${NC}/root/WARP.conf${GREEN} в ${NC}Mihomo"
-# echo -e "${CYAN}6) ${GREEN}Удалить ${NC}→ ${GREEN}установить ${NC}→ ${GREEN}настроить ${NC}mihomo-openwrt"
+echo -e "${CYAN}2) ${GREEN}Установить ${NC}Mixomo${GREEN} и включить ${NC}подписку${NC}"
+echo -e "${CYAN}3) ${GREEN}Удалить ${NC}Mixomo"
+echo -e "${CYAN}4) ${GREEN}Сменить список ${NC}MagiTrickle"
+echo -e "${CYAN}5) ${GREEN}Сгенерировать ${NC}WARP ${GREEN}в ${NC}/root/WARP.conf"
+echo -e "${CYAN}6) ${GREEN}Интегрировать ${NC}/root/WARP.conf${GREEN} в ${NC}Mihomo"
+# echo -e "${CYAN}888) ${GREEN}Удалить ${NC}→ ${GREEN}установить ${NC}→ ${GREEN}настроить ${NC}mihomo-openwrt"
 echo -e "${CYAN}Enter) ${GREEN}Выход\n"
 echo -ne "${YELLOW}Выберите пункт: ${NC}"
 read choiceM
@@ -139,22 +212,28 @@ case "$choiceM" in
   sh <(wget -q -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/mixomo_openwrt_install.sh)
   PAUSE
   ;;
-2)
+
+2) 
+  PODPISKA
+  ;;
+
+3)
   sh <(wget -q -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/mixomo_openwrt_delete.sh)
   PAUSE
   ;;
-3)
+4)
   magitrickle_config
   ;;
-4)
+5)
   sh <(wget -q -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/gen_WARP.sh)
   PAUSE
   ;;
-5)
+6)
   sh <(wget -q -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/WARP_to_conf.sh)
   PAUSE
   ;;
-6)
+  
+888)
   sh <(wget -q -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/mixomo_openwrt_delete.sh)
   sh <(wget -q -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/mixomo_openwrt_install.sh)
   sh <(wget -q -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/gen_WARP.sh)
