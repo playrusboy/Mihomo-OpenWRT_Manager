@@ -107,34 +107,48 @@ PODPISKA() {
 
   cat > /etc/mihomo/config.yaml <<EOF
 mixed-port: 7890
-mode: rule
-ipv6: false
-log-level: error
 allow-lan: false
-unified-delay: true
 tcp-concurrent: true
+mode: rule
+log-level: info
+ipv6: false
 external-controller: 0.0.0.0:9090
 external-ui: ui
 external-ui-url: https://github.com/MetaCubeX/metacubexd/releases/latest/download/compressed-dist.tgz
-routing-mark: 2
-
-proxies:
-
-proxy-providers:
-  sub-sub:
-    type: http
-    url: "$SUB_URL"
-    interval: 36000
+secret: 
+unified-delay: true
+profile:
+  store-selected: true
+  store-fake-ip: true
 
 proxy-groups:
-  - name: Proxy
+  - name: "⚡ Fastest"
+    type: url-test
+    use:
+      - sub.skytunnel.pw
+    url: "https://www.gstatic.com/generate_204"
+    interval: 300
+    tolerance: 100
+  - name: GLOBAL
     type: select
     proxies:
-    use:
-      - sub-sub
+      - "⚡ Fastest"
+      - REJECT
 
 rules:
-  - MATCH,Proxy
+  - "MATCH,GLOBAL"
+
+proxy-providers:
+  sub.skytunnel.pw:
+    type: http
+    url: "$SUB_URL"
+    interval: 43200
+    health-check:
+      enable: true
+      interval: 300
+      url: "https://www.gstatic.com/generate_204"
+      expected-status: 204
+
 EOF
 
 /etc/init.d/mihomo reload >/dev/null 2>&1
