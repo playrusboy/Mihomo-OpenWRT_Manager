@@ -106,73 +106,108 @@ PODPISKA() {
   [ -z "$SUB_URL" ] && echo -e "\n${RED}Ошибка! Ссылка пустая!${NC}" && PAUSE && return
 
   cat > /etc/mihomo/config.yaml <<EOF
-mixed-port: 7890
-allow-lan: false
 mode: rule
-log-level: error
 ipv6: false
-tcp-concurrent: true
-find-process-mode: off
+mixed-port: 7890
+log-level: error
+allow-lan: false
 unified-delay: true
-
+tcp-concurrent: false
+find-process-mode: off
 external-controller: 0.0.0.0:9090
-external-ui: ui
+external-ui: ./UI
 external-ui-url: https://github.com/MetaCubeX/metacubexd/releases/latest/download/compressed-dist.tgz
-secret: "CHANGE_ME_NOW"
-
+routing-mark: 2
 profile:
-  store-selected: false
-  store-fake-ip: false
+  store-selected: true
+  store-fake-ip: true
+  tracing: true
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  sniff:
+    HTTP:
+      ports: [80]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  skip-domain:
+    - Mijia Cloud
+    - +.lan
+    - +.local
+    - +.msftconnecttest.com
+    - +.msftncsi.com
+    - +.3gppnetwork.org
+    - +.openwrt.org
+    - +.vsean.net
+    - cudy.net
 
-dns:
-  enable: false
+hosts:
+  ntc.party: 130.255.77.28
+
+proxies:
+
+  - name: "Домашний интернет"
+    type: direct
 
 proxy-providers:
-  my_vpn:
+
+  Подписка:
     type: http
-    url: "$SUB_URL"
-    path: ./proxy_providers/vpn.yaml
-    interval: 3600
+    url: "$SUB_URL" # ЗДЕСЬ УКАЖИТЕ ССЫЛКУ НА ВАШУ ПОДПИСКУ
+    path: ./proxy-providers/sub.yaml
+    interval: 86400
     health-check:
       enable: true
-      url: https://cp.cloudflare.com/generate_204
-      expected-status: 204
-      interval: 120
+      url: http://www.gstatic.com/generate_204
+      interval: 300
       timeout: 5000
-      lazy: false
-    override:
-      udp: true
-      ip-version: ipv4-prefer
+      lazy: true
 
 proxy-groups:
-  - name: AUTO
+
+  - name: "Сервер для YouTube"
     type: fallback
+    url: http://gstatic.com/generate_204
+    expected-status: 204
+    interval: 300
+    lazy: true
+    icon: https://www.clashverge.dev/assets/icons/youtube.svg
+    proxies:
+      - "Домашний интернет"
     use:
-      - my_vpn
-    url: https://cp.cloudflare.com/generate_204
-    interval: 120
-    tolerance: 100
-    lazy: false
-    max-failed-times: 3
+      - "Подписка"
 
-  - name: PROXY
-    type: select
-    proxies:
-      - AUTO
-      - DIRECT
-      - REJECT
+  - name: "Сервер для остального трафика"
+    type: fallback
+    url: http://gstatic.com/generate_204
+    expected-status: 204
+    interval: 300
+    lazy: true
+    icon: https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.3/assets/svg/1f310.svg
+    use:
+      - "Подписка"
 
-  - name: VPN
-    type: select
-    proxies:
-      - PROXY
-      - DIRECT
-      - REJECT
+rule-providers:
+
+  youtube:
+    type: http
+    format: yaml
+    behavior: classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.yaml"
+    path: ./rule-providers/youtube-list.yaml
+    interval: 86400
 
 rules:
-  - MATCH,VPN
 
+  # Правила для списков из rule-providers
+  - RULE-SET,youtube,Сервер для YouTube
 
+  # Правило для остального трафика
+  - MATCH,Сервер для остального трафика
 EOF
 
 /etc/init.d/mihomo reload >/dev/null 2>&1
