@@ -117,8 +117,8 @@ END{
   print "log-level: error" >> OUT
   print "ipv6: false" >> OUT
   print "external-controller: 0.0.0.0:9090" >> OUT
-  print "external-ui: ui" >> OUT
-  print "external-ui-url: https://github.com/MetaCubeX/metacubexd/releases/latest/download/compressed-dist.tgz" >> OUT
+  print "external-ui: ./UI" >> OUT
+  print "external-ui-url: https://github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip" >> OUT
   print "secret:" >> OUT
   print "unified-delay: true" >> OUT
   print "profile:" >> OUT
