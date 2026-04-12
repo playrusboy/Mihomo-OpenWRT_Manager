@@ -10,6 +10,12 @@ sh <(wget -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/M
    При установки **MagiTrickle** появится меню выбора версии: `Оригинальный MagiTrickle` или `MagiTrickle badigit mod`
    
    Для обычного пользователя достаточно `Оригинальной версии`
+
+- Интегрировать **VPN** подписку в **Mihomo**
+
+   Вставьте ссылку на свою подписку.
+   Может воспользоваться тестовой подпиской https://github.com/StressOzz/Mixomo-Manager/issues/16
+   
 - Сгенерируйте **WARP** 
  
    Для генерации **WARP** через скрипт возможно понадобится установить **[Zapret](https://github.com/StressOzz/Zapret-Manager)**
@@ -20,6 +26,10 @@ sh <(wget -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/M
    Для интеграции своего **WARP** файла - скиньте его в `/root/WARP.conf`
 - Зайдите на http://192.168.1.1:8080/ выберите списки, которые Вам нужны, нажмите **Сохранить изменения**
 
+- Зайдите на http://192.168.1.1:9090/ui 
+   в поле **Хост** введите 192.168.1.1
+   во вкладке **Прокси** выберите сервера для Youtube и для того, который пойдёт через списки **MagiTrickle**
+
 ```
 Меню 
 1) Установить Mixomo
@@ -27,8 +37,9 @@ sh <(wget -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/M
 3) Сменить список MagiTrickle
    1) Список от ITDog
    2) Список от Internet Helper
-4) Сгенерировать WARP в /root/WARP.conf
-5) Интегрировать /root/WARP.conf в Mihomo
+4) Интегрировать VPN подписку в Mihomo / Сменить VPN подписку
+5) Сгенерировать WARP в /root/WARP.conf
+6) Интегрировать /root/WARP.conf в Mihomo
 ```
 
 ---
