@@ -116,7 +116,7 @@ tcp-concurrent: false
 find-process-mode: off
 external-controller: 0.0.0.0:9090
 external-ui: ./UI
-external-ui-url: https://github.com/MetaCubeX/metacubexd/releases/latest/download/compressed-dist.tgz
+external-ui-url: "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip"
 routing-mark: 2
 profile:
   store-selected: true
