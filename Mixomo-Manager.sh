@@ -98,29 +98,31 @@ check_status() {
 
 PODPISKA() {
 
-  sh <(wget -q -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/mixomo_openwrt_install.sh)
+
 
   echo -ne "\n${YELLOW}Введите ссылку на подписку (${CYAN}https://sub....${YELLOW}): ${NC}"
   read -r SUB_URL
 
-  [ -z "$SUB_URL" ] && echo -e "\n${RED}Ошибка: ссылка пустая!${NC}\n" && PAUSE && return
+  [ -z "$SUB_URL" ] && echo -e "\n${RED}Ошибка! Ссылка пустая!${NC}" && PAUSE && return
 
   cat > /etc/mihomo/config.yaml <<EOF
 mixed-port: 7890
-global-ua: clash.meta.router
 allow-lan: false
-tcp-concurrent: true
 mode: rule
-log-level: info
+log-level: error
 ipv6: false
+tcp-concurrent: true
+find-process-mode: off
+unified-delay: true
+
 external-controller: 0.0.0.0:9090
 external-ui: ui
 external-ui-url: https://github.com/MetaCubeX/metacubexd/releases/latest/download/compressed-dist.tgz
-secret: 
-unified-delay: true
+secret: ""
+
 profile:
-  store-selected: true
-  store-fake-ip: true
+  store-selected: false
+  store-fake-ip: false
 
 proxy-groups:
   - name: "StressKVN"
@@ -197,16 +199,21 @@ if [ -f "$CONFIGPATH" ]; then
     grep -Fq 'name: Meta (WA+FB+Instagram)' "$CONFIGPATH" && echo -e "${YELLOW}Используется список: ${NC}Internet Helper"
 fi
 
-[ -f /etc/mihomo/config.yaml ] && grep -q "https://sub" /etc/mihomo/config.yaml && echo -e "${YELLOW}Web-интерфейс:${NC}       ${CYAN}http://192.168.1.1:9090/ui/${NC}"
+[ -f "$CONFIGPATH" ] && echo -e "${YELLOW}Web-интерфейс MagiTrickle:${NC}  ${CYAN}192.168.1.1:8080${NC}"
+[ -f /etc/mihomo/config.yaml ] && echo -e "${YELLOW}Web-интерфейс Mihomo:${NC}       ${CYAN}192.168.1.1:9090/ui${NC}"
+
 
 
 echo -e "\n${CYAN}1) ${GREEN}Установить ${NC}Mixomo"
-echo -e "${CYAN}2) ${GREEN}Установить ${NC}Mixomo${GREEN} и включить ${NC}подписку${NC}"
-echo -e "${CYAN}3) ${GREEN}Сменить подписку${NC}"
-echo -e "${CYAN}4) ${GREEN}Удалить ${NC}Mixomo"
-echo -e "${CYAN}5) ${GREEN}Сменить список ${NC}MagiTrickle"
-echo -e "${CYAN}6) ${GREEN}Сгенерировать ${NC}WARP ${GREEN}в ${NC}/root/WARP.conf"
-echo -e "${CYAN}7) ${GREEN}Интегрировать ${NC}/root/WARP.conf${GREEN} в ${NC}Mihomo"
+echo -e "${CYAN}2) ${GREEN}Удалить ${NC}Mixomo"
+echo -e "${CYAN}3) ${GREEN}Сменить список ${NC}MagiTrickle"
+if [ -f /etc/mihomo/config.yaml ] && grep -q 'url: "' /etc/mihomo/config.yaml; then
+  echo -e "${CYAN}4) ${GREEN}Сменить ${NC}VPN${GREEN} подписку${NC}"
+else
+  echo -e "${CYAN}4) ${GREEN}Интегрировать ${NC}VPN${GREEN} подписку в ${NC}Mihomo${NC}"
+fi
+echo -e "${CYAN}5) ${GREEN}Сгенерировать ${NC}WARP ${GREEN}в ${NC}/root/WARP.conf"
+echo -e "${CYAN}6) ${GREEN}Интегрировать ${NC}/root/WARP.conf${GREEN} в ${NC}Mihomo"
 # echo -e "${CYAN}888) ${GREEN}Удалить ${NC}→ ${GREEN}установить ${NC}→ ${GREEN}настроить ${NC}mihomo-openwrt"
 echo -e "${CYAN}Enter) ${GREEN}Выход\n"
 echo -ne "${YELLOW}Выберите пункт: ${NC}"
@@ -218,40 +225,25 @@ case "$choiceM" in
   PAUSE
   ;;
 
-2) 
-  PODPISKA
-  ;;
-
-3)
- if [ ! -f /etc/mihomo/config.yaml ]; then
-    echo -e "\n${RED}Mihomo не установлен!${NC}"
-    PAUSE
-    return
-fi
-  echo -ne "\n${YELLOW}Введите ссылку на подписку (${CYAN}https://sub....${YELLOW}): ${NC}"
-  read -r SUBS_URL
-  [ -z "$SUBS_URL" ] && echo -e "\n${RED}Ошибка: ссылка пустая!${NC}\n" && PAUSE && return
-  sed -i "s|url: \"https://sub.*\"|url: \"$SUBS_URL\"|" /etc/mihomo/config.yaml
-  echo -e "\n${GREEN}Подписка успешно применена!${NC}"
-/etc/init.d/mihomo reload >/dev/null 2>&1
-/etc/init.d/mihomo restart >/dev/null 2>&1
-
-  PAUSE
-  ;;
-
-
-4)
+2)
   sh <(wget -q -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/mixomo_openwrt_delete.sh)
   PAUSE
   ;;
-5)
+
+3)
   magitrickle_config
   ;;
-6)
+
+
+4) 
+  PODPISKA
+  ;;
+
+5)
   sh <(wget -q -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/gen_WARP.sh)
   PAUSE
   ;;
-7)
+6)
   sh <(wget -q -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/WARP_to_conf.sh)
   PAUSE
   ;;
