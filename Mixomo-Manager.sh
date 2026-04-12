@@ -9,6 +9,8 @@ BLUE="\033[0;34m"
 NC="\033[0m"
 DGRAY="\033[38;5;244m"
 
+LAN_IP=$(uci get network.lan.ipaddr 2>/dev/null | cut -d/ -f1)
+
 if command -v opkg >/dev/null 2>&1; then UPDATE="opkg update"; INSTALL="opkg install"; else UPDATE="apk update"; INSTALL="apk add"; fi
 
 if ! command -v curl >/dev/null 2>&1; then clear; echo -e "${CYAN}Устанавливаем ${NC}curl"
@@ -246,8 +248,8 @@ if [ -f "$CONFIGPATH" ]; then
     grep -Fq 'name: Meta (WA+FB+Instagram)' "$CONFIGPATH" && echo -e "${YELLOW}Используется список: ${NC}Internet Helper"
 fi
 
-[ -f "$CONFIGPATH" ] && echo -e "${YELLOW}Web-интерфейс MagiTrickle:${NC}  ${CYAN}192.168.1.1:8080${NC}"
-[ -f /etc/mihomo/config.yaml ] && echo -e "${YELLOW}Web-интерфейс Mihomo:${NC}       ${CYAN}192.168.1.1:9090/ui${NC}"
+[ -f "$CONFIGPATH" ] && echo -e "${YELLOW}Web-интерфейс MagiTrickle:${NC}  ${CYAN}$LAN_IP:8080${NC}"
+[ -f /etc/mihomo/config.yaml ] && echo -e "${YELLOW}Web-интерфейс Mihomo:${NC}       ${CYAN}$LAN_IP:9090/ui${NC}"
 
 
 
