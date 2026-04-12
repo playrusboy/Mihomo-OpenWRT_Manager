@@ -14,7 +14,7 @@ sh <(wget -O - https://raw.githubusercontent.com/StressOzz/Mixomo-Manager/main/M
 - Интегрировать **VPN** подписку в **Mihomo**
 
    Вставьте ссылку на свою подписку.
-   Может воспользоваться тестовой подпиской https://github.com/StressOzz/Mixomo-Manager/issues/16
+   Можете воспользоваться тестовой подпиской https://github.com/StressOzz/Mixomo-Manager/issues/16
    
 - Сгенерируйте **WARP** 
  
