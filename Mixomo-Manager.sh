@@ -108,46 +108,70 @@ PODPISKA() {
   cat > /etc/mihomo/config.yaml <<EOF
 mixed-port: 7890
 allow-lan: false
-tcp-concurrent: true
 mode: rule
-log-level: info
+log-level: error
 ipv6: false
+tcp-concurrent: true
+find-process-mode: off
+unified-delay: true
+
 external-controller: 0.0.0.0:9090
 external-ui: ui
 external-ui-url: https://github.com/MetaCubeX/metacubexd/releases/latest/download/compressed-dist.tgz
-secret: 
-unified-delay: true
+secret: "CHANGE_ME_NOW"
+
 profile:
-  store-selected: true
-  store-fake-ip: true
+  store-selected: false
+  store-fake-ip: false
+
+dns:
+  enable: false
+
+proxy-providers:
+  my_vpn:
+    type: http
+    url: "$SUB_URL"
+    path: ./proxy_providers/vpn.yaml
+    interval: 3600
+    health-check:
+      enable: true
+      url: https://cp.cloudflare.com/generate_204
+      expected-status: 204
+      interval: 120
+      timeout: 5000
+      lazy: false
+    override:
+      udp: true
+      ip-version: ipv4-prefer
 
 proxy-groups:
-  - name: "⚡ Fastest"
-    type: url-test
+  - name: AUTO
+    type: fallback
     use:
-      - sub.skytunnel.pw
-    url: "https://www.gstatic.com/generate_204"
-    interval: 300
+      - my_vpn
+    url: https://cp.cloudflare.com/generate_204
+    interval: 120
     tolerance: 100
-  - name: GLOBAL
+    lazy: false
+    max-failed-times: 3
+
+  - name: PROXY
     type: select
     proxies:
-      - "⚡ Fastest"
+      - AUTO
+      - DIRECT
+      - REJECT
+
+  - name: VPN
+    type: select
+    proxies:
+      - PROXY
+      - DIRECT
       - REJECT
 
 rules:
-  - "MATCH,GLOBAL"
+  - MATCH,VPN
 
-proxy-providers:
-  sub.skytunnel.pw:
-    type: http
-    url: "$SUB_URL"
-    interval: 43200
-    health-check:
-      enable: true
-      interval: 300
-      url: "https://www.gstatic.com/generate_204"
-      expected-status: 204
 
 EOF
 
