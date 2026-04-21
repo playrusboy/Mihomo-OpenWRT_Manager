@@ -118,8 +118,8 @@ unified-delay: true
 tcp-concurrent: false
 find-process-mode: off
 external-controller: 0.0.0.0:9090
-external-ui: ./UI
-external-ui-url: "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip"
+external-ui: ui
+external-ui-url: https://github.com/MetaCubeX/metacubexd/releases/latest/download/compressed-dist.tgz
 routing-mark: 2
 profile:
   store-selected: true
@@ -174,10 +174,6 @@ proxy-groups:
 
   - name: "Сервер для YouTube"
     type: select
-    url: http://gstatic.com/generate_204
-    expected-status: 204
-    interval: 300
-    lazy: true
     icon: https://www.clashverge.dev/assets/icons/youtube.svg
     proxies:
       - "Домашний интернет"
@@ -186,10 +182,6 @@ proxy-groups:
 
   - name: "Сервер для остального трафика"
     type: select
-    url: http://gstatic.com/generate_204
-    expected-status: 204
-    interval: 300
-    lazy: true
     icon: https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.3/assets/svg/1f310.svg
     use:
       - "Подписка"
